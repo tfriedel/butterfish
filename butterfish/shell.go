@@ -626,14 +626,6 @@ func (this *ShellState) FilterChildOut(data string) bool {
 		return true
 	}
 
-/* 	shell := this.Butterfish.Config.ParseShell()
-	if shell == "fish" {
-		// print some debug string
-		// Filter out any remaining fish function definition output
-		if strings.Contains(data, "function fish_prompt") || strings.Contains(data, "function suppress_output") {
-			return true
-		}
-	} */
 
 	return false
 }
