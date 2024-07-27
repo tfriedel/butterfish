@@ -45,8 +45,10 @@ const CLEAR_COLOR = "\x1b[0m"
 // that we can detect where it starts and ends.
 const PROMPT_PREFIX = "\033Q"
 const PROMPT_SUFFIX = "\033R"
-const PROMPT_PREFIX_ESCAPED = "\\\\033Q"
-const PROMPT_SUFFIX_ESCAPED = "\\\\033R"
+const PROMPT_PREFIX_ESCAPED = "\\033Q"
+const PROMPT_SUFFIX_ESCAPED = "\\033R"
+const PROMPT_PREFIX_ESCAPED_FISH = "\\\\033Q"
+const PROMPT_SUFFIX_ESCAPED_FISH = "\\\\033R"
 const EMOJI_DEFAULT = "🐠"
 const cursor_offset = 3
 
@@ -514,7 +516,11 @@ eval fish_prompt > /dev/null 2>&1
 	if !this.Config.ShellLeavePromptAlone {
 		promptIcon = EMOJI_DEFAULT
 	}
-	fmt.Fprintf(childIn, ps1, PROMPT_PREFIX_ESCAPED, promptIcon, PROMPT_SUFFIX_ESCAPED)
+	if shell == "fish" {
+		fmt.Fprintf(childIn, ps1, PROMPT_PREFIX_ESCAPED_FISH, promptIcon, PROMPT_SUFFIX_ESCAPED_FISH)
+	} else {
+		fmt.Fprintf(childIn, ps1, PROMPT_PREFIX_ESCAPED, promptIcon, PROMPT_SUFFIX_ESCAPED)
+	}
 }
 
 // Function to replace cursor movement escape sequences by subtracting a given amount from the column value
@@ -617,14 +623,14 @@ func (this *ShellState) FilterChildOut(data string) bool {
 		return true
 	}
 
-	shell := this.Butterfish.Config.ParseShell()
+/* 	shell := this.Butterfish.Config.ParseShell()
 	if shell == "fish" {
 		// print some debug string
 		// Filter out any remaining fish function definition output
 		if strings.Contains(data, "function fish_prompt") || strings.Contains(data, "function suppress_output") {
 			return true
 		}
-	}
+	} */
 
 	return false
 }
